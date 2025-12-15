@@ -1,0 +1,50 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Students API Test</title>
+    <style>
+      body { font-family: Arial, sans-serif; padding: 16px; }
+      input, button { padding: 8px; margin: 4px 0; display:block }
+    </style>
+  </head>
+  <body>
+    <h1>Students API - Quick Test</h1>
+    <section>
+      <h3>Create Student</h3>
+      <input id="fullName" placeholder="Full name" />
+      <input id="email" placeholder="Email" />
+      <input id="ra" placeholder="RA" />
+      <input id="cpf" placeholder="CPF" />
+      <button id="create">Create</button>
+    </section>
+
+    <section>
+      <h3>Students List</h3>
+      <button id="list">Refresh List</button>
+      <pre id="output"></pre>
+    </section>
+
+    <script>
+      const api = '/api/students';
+      const out = document.getElementById('output');
+
+      document.getElementById('create').addEventListener('click', async () => {
+        const body = {
+          fullName: document.getElementById('fullName').value,
+          email: document.getElementById('email').value,
+          ra: document.getElementById('ra').value,
+          cpf: document.getElementById('cpf').value,
+        };
+        const res = await fetch(api, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+        out.textContent = await res.text();
+      });
+
+      document.getElementById('list').addEventListener('click', async () => {
+        const res = await fetch(api);
+        const data = await res.json();
+        out.textContent = JSON.stringify(data, null, 2);
+      });
+    </script>
+  </body>
+</html>
